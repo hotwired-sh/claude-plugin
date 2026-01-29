@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "hotwired": {
+      "command": "/Applications/Hotwired.app/Contents/MacOS/hotwired-mcp",
+      "env": {
+        "ZELLIJ_SESSION_NAME": "${ZELLIJ_SESSION_NAME}",
+        "CLAUDE_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}"
+      }
+    }
+  }
+}

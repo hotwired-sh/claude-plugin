@@ -1,0 +1,13 @@
+{
+  "name": "hotwired",
+  "version": "0.1.0",
+  "description": "Multi-agent workflow orchestration for Claude Code",
+  "author": {
+    "name": "Hotwired",
+    "url": "https://hotwired.sh"
+  },
+  "homepage": "https://hotwired.sh",
+  "repository": "https://github.com/hotwired-sh/claude-plugin",
+  "license": "MIT",
+  "keywords": ["workflow", "multi-agent", "orchestration", "collaboration", "zellij"]
+}

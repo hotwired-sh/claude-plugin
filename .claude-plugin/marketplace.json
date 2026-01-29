@@ -1,0 +1,11 @@
+{
+  "name": "hotwired-sh-claude-plugin",
+  "description": "Hotwired plugin marketplace",
+  "plugins": [
+    {
+      "name": "hotwired",
+      "description": "Multi-agent workflow orchestration for Claude Code",
+      "source": "./"
+    }
+  ]
+}
