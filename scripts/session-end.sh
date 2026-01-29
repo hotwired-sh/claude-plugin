@@ -23,6 +23,6 @@ if [ ! -x "${MCP_BINARY}" ]; then
 fi
 
 # Deregister session (fire and forget)
-"${MCP_BINARY}" --deregister --session "${SESSION_NAME}" &>/dev/null &
+"${MCP_BINARY}" deregister --session "${SESSION_NAME}" &>/dev/null &
 
 exit 0

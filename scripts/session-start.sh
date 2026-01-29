@@ -25,7 +25,7 @@ if [ ! -x "${MCP_BINARY}" ]; then
 fi
 
 # Register session (fire and forget, don't block Claude startup)
-"${MCP_BINARY}" --register \
+"${MCP_BINARY}" register \
     --session "${SESSION_NAME}" \
     --project "${PROJECT_DIR}" &>/dev/null &
 
