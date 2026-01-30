@@ -1,6 +1,10 @@
 {
   "name": "hotwired-sh-claude-plugin",
   "description": "Hotwired plugin marketplace",
+  "owner": {
+    "name": "Hotwired",
+    "url": "https://hotwired.sh"
+  },
   "plugins": [
     {
       "name": "hotwired",
