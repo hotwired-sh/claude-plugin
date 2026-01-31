@@ -2,7 +2,7 @@
   "mcpServers": {
     "hotwired": {
       "command": "npx",
-      "args": ["hotwired-mcp@latest"]
+      "args": ["@hotwired-sh/hotwired-mcp@latest"]
     }
   }
 }

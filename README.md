@@ -1,24 +1,27 @@
 # Hotwired Plugin for Claude Code
 
-Multi-agent workflow orchestration for Claude Code. This plugin connects Claude Code to the [Hotwired](https://hotwired.sh) desktop application, enabling:
+![Hotwired](hotwired-sh.png)
 
-- **Workflow tools**: Send messages, handoffs, report status between agents
-- **Session detection**: Automatic registration so Hotwired knows when Claude is running
-- **Slash commands**: `/hotwired:status` to check connection
+Claude Code plugin for [Hotwired](https://hotwired.sh) multi-agent workflow orchestration.
+
+## What is Hotwired?
+
+Hotwired coordinates multiple AI coding agents working together on complex tasks. Instead of one agent doing everything, you can have specialized agents (strategist, builder, reviewer) collaborating in real-time with human oversight.
+
+This plugin connects Claude Code to the Hotwired desktop app, enabling:
+
+- **Workflow coordination** - Send messages, handoffs, and status updates between agents
+- **Human-in-the-loop** - Request input, report blockers, get approvals
+- **Session tracking** - Hotwired knows when Claude is running and in which terminal
 
 ## Prerequisites
 
-1. **Hotwired Desktop App** - Install from [hotwired.sh](https://hotwired.sh)
-2. **Zellij** - Terminal multiplexer ([zellij.dev](https://zellij.dev))
-3. **Claude Code** - Version 1.0.33 or later
+- [Hotwired Desktop App](https://hotwired.sh) - Must be running
+- [Zellij](https://zellij.dev) - Terminal multiplexer for session management
+- [Claude Code](https://claude.ai/code) - Version 1.0.33 or later
+- [Node.js](https://nodejs.org) - For running the MCP server via npx
 
 ## Installation
-
-### From Official Marketplace (Recommended)
-
-```bash
-claude plugin install hotwired
-```
 
 ### From GitHub
 
@@ -27,41 +30,25 @@ claude plugin install hotwired
 claude plugin marketplace add hotwired-sh/claude-plugin
 
 # Install the plugin
-claude plugin install hotwired
+claude plugin install hotwired@hotwired-sh-claude-plugin
 ```
 
-## Usage
-
-### 1. Start Hotwired Desktop App
-
-Launch the Hotwired app. It will listen on `~/.hotwired/hotwired.sock`.
-
-### 2. Start Claude in Zellij
+## Quick Start
 
 ```bash
-# Create or attach to a Zellij session
+# 1. Start Hotwired desktop app
+
+# 2. Start Claude in a Zellij session
 zellij -s my-project
-
-# Start Claude Code
 claude
-```
 
-When Claude starts, the plugin automatically:
-- Registers your session with Hotwired
-- Connects to the Hotwired backend via Unix socket
-- Makes workflow tools available
-
-### 3. Check Status
-
-Run the status command to verify everything is connected:
-
-```
+# 3. Check connection
 /hotwired:status
 ```
 
-### 4. Join a Workflow
+When Claude starts, the plugin automatically registers your session with Hotwired.
 
-In the Hotwired UI, create a workflow run and pair your Claude session. The plugin provides these MCP tools:
+## Available Tools
 
 | Tool | Description |
 |------|-------------|
@@ -69,29 +56,29 @@ In the Hotwired UI, create a workflow run and pair your Claude session. The plug
 | `get_run_status` | Check current run status |
 | `report_status` | Update your working state |
 | `send_message` | Send message to other participants |
-| `request_input` | Ask human for input (blocks workflow) |
+| `request_input` | Ask human for input |
 | `report_impediment` | Signal you're blocked |
 | `handoff` | Hand work to another agent |
 | `task_complete` | Mark a task as complete |
 
-## How It Works
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  HOTWIRED DESKTOP APP                                           │
-│  └── Listens on ~/.hotwired/hotwired.sock                       │
+│  └── Unix Socket: ~/.hotwired/hotwired.sock                     │
 └─────────────────────────────────────────────────────────────────┘
                               ▲
-                              │ Unix Socket
+                              │ Local IPC (no network)
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │  CLAUDE CODE                │                                   │
 │  ┌──────────────────────────┴───────────────────────────┐      │
-│  │  hotwired-mcp binary                                  │      │
-│  │  (from Hotwired.app)                                  │      │
+│  │  hotwired-mcp (via npx)                              │      │
+│  │  github.com/hotwired-sh/hotwired-mcp                 │      │
 │  └───────────────────────────────────────────────────────┘      │
 │  ┌───────────────────────────────────────────────────────┐      │
-│  │  Hotwired Plugin                                      │      │
+│  │  This Plugin                                          │      │
 │  │  - SessionStart hook → registers session              │      │
 │  │  - SessionEnd hook → deregisters session              │      │
 │  │  - /hotwired:status command                           │      │
@@ -99,18 +86,17 @@ In the Hotwired UI, create a workflow run and pair your Claude session. The plug
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+**Everything runs locally.** The MCP server communicates with the desktop app via Unix socket. No external network calls.
+
 ## Troubleshooting
 
-### "Desktop app not found"
+### "MCP server not found"
 
-The plugin looks for the MCP binary at:
-- macOS: `/Applications/Hotwired.app/Contents/MacOS/hotwired-mcp`
-
-Make sure the Hotwired desktop app is installed.
+The plugin runs `npx @hotwired-sh/hotwired-mcp`. Make sure Node.js is installed.
 
 ### "Not in Zellij session"
 
-The plugin requires Zellij for session management. Start Claude inside a Zellij session:
+Start Claude inside a Zellij session:
 
 ```bash
 zellij -s my-session
@@ -119,15 +105,12 @@ claude
 
 ### "Socket not found"
 
-Make sure the Hotwired desktop app is running. The app creates the socket at `~/.hotwired/hotwired.sock`.
+Make sure the Hotwired desktop app is running. It creates the socket at `~/.hotwired/hotwired.sock`.
 
-## Development
+## Related
 
-To test the plugin locally during development:
-
-```bash
-claude --plugin-dir /path/to/claude-plugin
-```
+- [hotwired-mcp](https://github.com/hotwired-sh/hotwired-mcp) - The MCP server (open source)
+- [hotwired.sh](https://hotwired.sh) - Desktop app and documentation
 
 ## License
 
