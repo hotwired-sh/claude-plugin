@@ -73,9 +73,9 @@ When Claude starts, the plugin automatically registers your session with Hotwire
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │  CLAUDE CODE                │                                   │
-│  ┌──────────────────────────┴───────────────────────────┐      │
-│  │  hotwired-mcp (via npx)                              │      │
-│  │  github.com/hotwired-sh/hotwired-mcp                 │      │
+│  ┌──────────────────────────┴────────────────────────────┐      │
+│  │  hotwired-mcp (via npx)                               │      │
+│  │  github.com/hotwired-sh/hotwired-mcp                  │      │
 │  └───────────────────────────────────────────────────────┘      │
 │  ┌───────────────────────────────────────────────────────┐      │
 │  │  This Plugin                                          │      │
