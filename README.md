@@ -30,7 +30,7 @@ This plugin connects Claude Code to the Hotwired desktop app, enabling:
 claude plugin marketplace add hotwired-sh/claude-plugin
 
 # Install the plugin
-claude plugin install hotwired@hotwired-sh-claude-plugin
+claude plugin install hotwired@hotwired-sh
 ```
 
 ## Quick Start
