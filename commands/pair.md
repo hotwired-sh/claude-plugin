@@ -35,31 +35,44 @@ mcp__hotwired__pair({
 
 ### 2. Handle Response
 
-**Joined**:
+**Joined** (exactly one match - auto-paired):
 ```json
 {
   "status": "joined",
   "run_id": "xxx",
-  "role": "secondary",
+  "role": "reviewer",
   "role_name": "Reviewer",
   "playbook": "doc-editor",
   "protocol": "...",
-  "context": { "primary_status": "...", "artifact": "...", "summary": "..." }
+  "context": { "primary_status": "...", "current_artifact": "...", "conversation_summary": "..." }
 }
 ```
 → You have your protocol. Read the context summary. Begin your role.
+→ Note: Backend determined your role from the `needs_second_agent` impediment.
 
-**Multiple** (multiple runs waiting):
+**NeedsSelection** (multiple runs waiting - app shows picker):
 ```json
-{ "status": "multiple", "pending_runs": [{ "run_id", "intent", "role" }] }
+{
+  "status": "needs_selection",
+  "pending_runs": [{ "run_id": "...", "playbook": "...", "intent": "...", "role_needed": "..." }],
+  "message": "Multiple runs need pairing. Select in app."
+}
 ```
-→ Present options to user, wait for selection.
+→ Tell user: "Multiple runs need a second agent. Please select which one in the Hotwired app."
+→ Wait. When user selects, you'll receive a trigger message via Zellij.
+→ Then call `get_protocol(run_id, role)` to get your instructions.
 
-**None**:
+**NoneAvailable**:
+```json
+{ "status": "none", "message": "No runs need second agent" }
+```
 → "No runs waiting for second agent. Check that primary raised impediment."
 
 **ProjectMismatch** (if same_project required):
-→ "This run requires you to be in [path]. Please cd there and try again."
+```json
+{ "status": "project_mismatch", "required_path": "/path/to/project", "current_path": "/wrong/path" }
+```
+→ "This run requires you to be in [required_path]. Please cd there and try again."
 
 **Error**:
 → Report with fix suggestions.
