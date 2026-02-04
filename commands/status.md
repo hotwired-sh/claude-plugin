@@ -1,11 +1,11 @@
 ---
 description: Check Hotwired connection status and session registration
-version: 1.0.0
+version: --help
 ---
 
 # Hotwired Status Check
 
-**Plugin Version: 1.0.0**
+**Plugin Version: --help**
 
 Check your connection to the Hotwired backend and verify your session is registered.
 
@@ -21,7 +21,7 @@ Check your connection to the Hotwired backend and verify your session is registe
 ```
 Hotwired Status
 ===============
-Plugin Version: 1.0.0
+Plugin Version: --help
 Zellij Session: [session-name or "Not in Zellij"]
 Socket: [Connected / Not found]
 Desktop App: [Running / Not detected]

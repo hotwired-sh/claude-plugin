@@ -1,9 +1,9 @@
-# Hotwired Plugin v1.0.0
+# Hotwired Plugin v--help
 
 This plugin connects Claude Code to the Hotwired multi-agent workflow system.
 
 ## Version Info
-- **Plugin Version**: 1.0.0
+- **Plugin Version**: --help
 - **MCP Server**: hotwired-mcp (installed separately)
 
 ## Available Commands
