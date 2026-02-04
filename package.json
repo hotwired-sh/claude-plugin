@@ -1,0 +1,65 @@
+{
+  "name": "@hotwired-sh/claude-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Claude Code plugin for Hotwired multi-agent workflow orchestration",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hotwired-sh/claude-plugin.git"
+  },
+  "author": "Hotwired <hello@hotwired.sh>",
+  "license": "MIT",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "conventional-changelog-conventionalcommits": "^8.0.0",
+    "semantic-release": "^24.0.0"
+  },
+  "release": {
+    "branches": ["main"],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits",
+          "releaseRules": [
+            { "type": "feat", "release": "minor" },
+            { "type": "fix", "release": "patch" },
+            { "type": "perf", "release": "patch" },
+            { "type": "revert", "release": "patch" },
+            { "type": "refactor", "release": "patch" },
+            { "type": "docs", "release": false },
+            { "type": "style", "release": false },
+            { "type": "test", "release": false },
+            { "type": "build", "release": false },
+            { "type": "ci", "release": false },
+            { "type": "chore", "release": false },
+            { "breaking": true, "release": "major" }
+          ]
+        }
+      ],
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "node scripts/update-version.js ${nextRelease.version}"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": ["CHANGELOG.md", "package.json", ".claude-plugin/plugin.json", "commands/status.md", "CLAUDE.md"],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ],
+      "@semantic-release/github"
+    ]
+  }
+}
