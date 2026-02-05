@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/hotwired-sh/claude-plugin/compare/v1.0.0...v1.0.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* **hooks:** correct hooks.json structure with proper nesting ([21ae816](https://github.com/hotwired-sh/claude-plugin/commit/21ae816b0a348ae6860249c83f75a0eaeeb221d9))
+
 # 1.0.0 (2026-02-04)
 
 
