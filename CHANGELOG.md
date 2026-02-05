@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/hotwired-sh/claude-plugin/compare/v1.0.1...v1.0.2) (2026-02-05)
+
+
+### Bug Fixes
+
+* **hooks:** ensure hooks are called on session start/end ([2fa81f1](https://github.com/hotwired-sh/claude-plugin/commit/2fa81f18b2b8e5e3446b9dbf585488d47e27566b))
+
 ## [1.0.1](https://github.com/hotwired-sh/claude-plugin/compare/v1.0.0...v1.0.1) (2026-02-05)
 
 
