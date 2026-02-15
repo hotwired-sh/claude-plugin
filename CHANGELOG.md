@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/hotwired-sh/claude-plugin/compare/v2.2.0...v2.2.1) (2026-02-15)
+
+
+### Bug Fixes
+
+* **hotwire:** smarter run resumption logic ([b92394f](https://github.com/hotwired-sh/claude-plugin/commit/b92394f58cf58777ce3de212906c699b9d949406))
+
 # [2.2.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.1.0...v2.2.0) (2026-02-15)
 
 
