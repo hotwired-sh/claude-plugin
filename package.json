@@ -1,6 +1,6 @@
 {
   "name": "@hotwired-sh/claude-plugin",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "private": true,
   "description": "Claude Code plugin for Hotwired multi-agent workflow orchestration",
   "repository": {

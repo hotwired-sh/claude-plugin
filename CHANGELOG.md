@@ -1,3 +1,24 @@
+# [2.0.0](https://github.com/hotwired-sh/claude-plugin/compare/v1.0.2...v2.0.0) (2026-02-15)
+
+
+* feat!: switch from MCP tools to CLI commands for agent communication ([4ac5aa5](https://github.com/hotwired-sh/claude-plugin/commit/4ac5aa57c54de7d41d2b836f39376388b0fffa9a))
+
+
+### BREAKING CHANGES
+
+* Agent communication now uses `hotwired` CLI commands
+instead of MCP tools. Requires playbooks v2.0.0+.
+
+- `handoff` → `hotwired send --to <agent>`
+- `send_message` → `hotwired send --to human`
+- `report_impediment` → `hotwired impediment`
+- `task_complete` → `hotwired complete`
+- `get_run_status` → `hotwired status`
+
+MCP tools are still used for workflow setup (hotwire, pair, ping).
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
 ## [1.0.2](https://github.com/hotwired-sh/claude-plugin/compare/v1.0.1...v1.0.2) (2026-02-05)
 
 
