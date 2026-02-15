@@ -19,18 +19,17 @@ No workflow tools until this returns your protocol.
 ## Prerequisites
 
 1. `$ZELLIJ_SESSION_NAME` must be set
-2. `mcp__hotwired__ping` must succeed
+2. `hotwired status` must succeed (tests CLI connectivity)
 
 If either fails: "Restart Claude in Zellij with desktop app running."
 
 ## Execution
 
-### 1. Call MCP
-```
-mcp__hotwired__pair({
-  zellij_session: $ZELLIJ_SESSION_NAME,
-  project_path: pwd
-})
+### 1. Call CLI
+```bash
+hotwired pair \
+  --zellij-session "$ZELLIJ_SESSION_NAME" \
+  --project-path "$PWD"
 ```
 
 ### 2. Handle Response

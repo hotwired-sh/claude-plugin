@@ -19,16 +19,16 @@ Call `get_run_status` to recover state.
 
 Before starting a new run, check if you should CONTINUE an existing one:
 
-1. **Call `mcp__hotwired__list_active_runs`** with project_path and zellij_session.
+1. **Run `hotwired list`** to see active runs.
 
-2. **If you find a run where `my_role` is set:**
+2. **If you find a run where you were previously attached:**
    → You were attached to this run (maybe after compaction).
    → Suggest: "I was working on run [run_id]. Continue that run, or start new?"
 
 3. **If user's intent matches an active run's intent:**
    → "There's an active '[playbook]' run for '[intent]'. Continue that, or start new?"
 
-4. **Only if no match or user wants new** → proceed with `hotwire` tool.
+4. **Only if no match or user wants new** → proceed with `hotwired hotwire`.
 
 This prevents duplicate runs and helps users resume interrupted work.
 
@@ -39,7 +39,7 @@ No workflow tools until this returns your protocol.
 ## Prerequisites
 
 1. `$ZELLIJ_SESSION_NAME` must be set
-2. `mcp__hotwired__ping` must succeed
+2. `hotwired status` must succeed (tests CLI connectivity)
 
 If either fails: "Restart Claude in Zellij with desktop app running."
 
@@ -58,15 +58,13 @@ zellij_session: $ZELLIJ_SESSION_NAME
 - Scan for docs/, specs/ directories
 - Match keywords to existing files
 
-### 3. Call MCP
-```
-mcp__hotwired__hotwire({
-  project_path,
-  zellij_session,
-  intent,
-  suggested_playbook,
-  suggested_artifacts: [{ path, action }]
-})
+### 3. Call CLI
+```bash
+hotwired hotwire \
+  --project-path "$PWD" \
+  --zellij-session "$ZELLIJ_SESSION_NAME" \
+  --intent "<intent>" \
+  --playbook "<suggested_playbook>"
 ```
 
 ### 4. Handle Response

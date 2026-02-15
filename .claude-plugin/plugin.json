@@ -1,6 +1,6 @@
 {
   "name": "hotwired",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Multi-agent workflow orchestration for Claude Code",
   "author": {
     "name": "Hotwired",

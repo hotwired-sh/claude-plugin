@@ -1,3 +1,15 @@
+# [2.1.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.0.0...v2.1.0) (2026-02-15)
+
+
+### Features
+
+* update /hotwire and /pair commands to use CLI ([c7aa569](https://github.com/hotwired-sh/claude-plugin/commit/c7aa569))
+
+Switch from MCP tool calls to hotwired CLI commands:
+- /hotwire now uses `hotwired hotwire` CLI command
+- /pair now uses `hotwired pair` CLI command
+- Prerequisite check uses `hotwired status` instead of MCP ping
+
 # [2.0.0](https://github.com/hotwired-sh/claude-plugin/compare/v1.0.2...v2.0.0) (2026-02-15)
 
 
