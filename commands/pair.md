@@ -25,56 +25,49 @@ If either fails: "Restart Claude in Zellij with desktop app running."
 
 ## Execution
 
-### 1. Call CLI
+### 1. Find the Run to Join
+
 ```bash
-hotwired pair \
-  --zellij-session "$ZELLIJ_SESSION_NAME" \
-  --project-path "$PWD"
+hotwired run list
 ```
 
-### 2. Handle Response
+Look for runs with status `active` in the **same project directory** you're currently in.
+If you know the run ID already (e.g., user told you, or you see it in the UI), skip to step 2.
 
-**Joined** (exactly one match - auto-paired):
-```json
-{
-  "status": "joined",
-  "run_id": "xxx",
-  "role": "reviewer",
-  "role_name": "Reviewer",
-  "playbook": "doc-editor",
-  "protocol": "...",
-  "context": { "primary_status": "...", "current_artifact": "...", "conversation_summary": "..." }
-}
+### 2. Determine Your Role
+
+For `plan-build` playbook: If `strategist` is taken, you're `builder`.
+For `architect-team` playbook: You might be `worker-1`, `worker-2`, or `worker-3`.
+For `doc-editor` playbook: If `writer` is taken, you're `critiquer`.
+
+### 3. Call CLI
+
+```bash
+hotwired pair <RUN_ID> --role <YOUR_ROLE>
 ```
-→ You have your protocol. Read the context summary. Begin your role.
-→ Note: Backend determined your role from the `needs_second_agent` impediment.
 
-**NeedsSelection** (multiple runs waiting - app shows picker):
-```json
-{
-  "status": "needs_selection",
-  "pending_runs": [{ "run_id": "...", "playbook": "...", "intent": "...", "role_needed": "..." }],
-  "message": "Multiple runs need pairing. Select in app."
-}
+Example:
+```bash
+hotwired pair 1e9ba421 --role builder
 ```
-→ Tell user: "Multiple runs need a second agent. Please select which one in the Hotwired app."
-→ Wait. When user selects, you'll receive a trigger message via Zellij.
-→ Then call `get_protocol(run_id, role)` to get your instructions.
 
-**NoneAvailable**:
-```json
-{ "status": "none", "message": "No runs need second agent" }
+### 4. Handle Response
+
+**Success** - You'll see:
 ```
-→ "No runs waiting for second agent. Check that primary raised impediment."
+Joined run: <run_id>
+Your role: <role>
 
-**ProjectMismatch** (if same_project required):
-```json
-{ "status": "project_mismatch", "required_path": "/path/to/project", "current_path": "/wrong/path" }
+<protocol instructions>
 ```
-→ "This run requires you to be in [required_path]. Please cd there and try again."
+→ You have your protocol. Begin your role.
 
-**Error**:
-→ Report with fix suggestions.
+**Error** - Common issues:
+- "Run not found" → Check the run ID is correct
+- "Role already taken" → That role is filled, try a different one
+- "Not in Zellij" → You must run this from within a Zellij session
+
+**No protocol returned** → The backend may not have assigned the role properly. Check `hotwired status` to verify attachment.
 
 ## After Joined
 
