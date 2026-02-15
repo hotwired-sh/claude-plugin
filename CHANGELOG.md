@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.1.0...v2.2.0) (2026-02-15)
+
+
+### Features
+
+* remove MCP server dependency ([33570af](https://github.com/hotwired-sh/claude-plugin/commit/33570af2e5ca0ffce9bdc4cf71cc968069579713))
+
 # [2.1.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.0.0...v2.1.0) (2026-02-15)
 
 
