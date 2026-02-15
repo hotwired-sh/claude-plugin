@@ -10,7 +10,7 @@ Hotwired coordinates multiple AI coding agents working together on complex tasks
 
 This plugin connects Claude Code to the Hotwired desktop app, enabling:
 
-- **Workflow coordination** - Send messages, handoffs, and status updates between agents
+- **Workflow coordination** - CLI commands for messages, handoffs, and status updates between agents
 - **Human-in-the-loop** - Request input, report blockers, get approvals
 - **Session tracking** - Hotwired knows when Claude is running and in which terminal
 
@@ -48,18 +48,31 @@ claude
 
 When Claude starts, the plugin automatically registers your session with Hotwired.
 
-## Available Tools
+## MCP Tools (Workflow Setup)
+
+These MCP tools are used to start/join workflows:
 
 | Tool | Description |
 |------|-------------|
-| `get_protocol` | Fetch workflow protocol and role instructions |
-| `get_run_status` | Check current run status |
-| `report_status` | Update your working state |
-| `send_message` | Send message to other participants |
-| `request_input` | Ask human for input |
-| `report_impediment` | Signal you're blocked |
-| `handoff` | Hand work to another agent |
-| `task_complete` | Mark a task as complete |
+| `mcp__hotwired__hotwire` | Start a new workflow run |
+| `mcp__hotwired__pair` | Join an existing run |
+| `mcp__hotwired__ping` | Check connection to Hotwired |
+| `mcp__hotwired__get_protocol` | Fetch workflow protocol and role instructions |
+| `mcp__hotwired__list_active_runs` | List runs you can join or resume |
+
+## CLI Commands (Agent Communication)
+
+After joining a workflow, use the `hotwired` CLI for agent communication:
+
+| Command | Description |
+|---------|-------------|
+| `hotwired status` | Check run state and connected agents |
+| `hotwired send --to <recipient> <msg>` | Send message/handoff to agent or human |
+| `hotwired impediment <description>` | Signal you're blocked |
+| `hotwired complete` | Mark your task as complete |
+| `hotwired inbox` | Check for incoming messages |
+| `hotwired artifact sync <file>` | Track a document artifact |
+| `hotwired artifact comment <file> <text> <comment>` | Add comment to document |
 
 ## Architecture
 
