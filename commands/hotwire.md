@@ -19,18 +19,24 @@ Call `get_run_status` to recover state.
 
 Before starting a new run, check if you should CONTINUE an existing one:
 
-1. **Run `hotwired list`** to see active runs.
+1. **Run `hotwired status`** first - if it shows you're already attached to a run, ask:
+   → "You're attached to run [run_id]. Continue that, or start a new run?"
 
-2. **If you find a run where you were previously attached:**
-   → You were attached to this run (maybe after compaction).
-   → Suggest: "I was working on run [run_id]. Continue that run, or start new?"
+2. **Only suggest resuming if ALL of these are true:**
+   - The run is from the SAME project directory (compare `pwd` with run's project path)
+   - The run is recent (created today or yesterday, not a week ago)
+   - The run is `active` status (ignore `pending_confirmation` or `completed`)
+   - The intent/goal is similar to what the user is asking
 
-3. **If user's intent matches an active run's intent:**
-   → "There's an active '[playbook]' run for '[intent]'. Continue that, or start new?"
+3. **DON'T suggest resuming if:**
+   - You're in a different directory than the run's project
+   - The run is old (more than 1-2 days)
+   - The run is `pending_confirmation` (these are stale, just start fresh)
+   - The run is `completed`
 
-4. **Only if no match or user wants new** → proceed with `hotwired hotwire`.
+4. **When in doubt, start fresh.** Users prefer a clean start over being asked about old runs.
 
-This prevents duplicate runs and helps users resume interrupted work.
+This prevents annoying prompts about irrelevant runs from other projects.
 
 ## Tools Locked Until Success
 
