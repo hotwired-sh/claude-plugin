@@ -13,12 +13,14 @@ This plugin connects Claude Code to the Hotwired desktop app, enabling:
 - **Workflow coordination** - CLI commands for messages, handoffs, and status updates between agents
 - **Human-in-the-loop** - Request input, report blockers, get approvals
 - **Session tracking** - Hotwired knows when Claude is running and in which terminal
+- **Lifecycle telemetry** - Hook events (Stop, PreCompact, SubagentStart, etc.) are forwarded to the Hotwired UI
 
 ## Prerequisites
 
 - [Hotwired Desktop App](https://hotwired.sh) - Must be running
 - [Zellij](https://zellij.dev) - Terminal multiplexer for session management
 - [Claude Code](https://claude.ai/code) - Version 1.0.33 or later
+- [hotwired CLI](https://github.com/hotwired-sh/hotwired-cli) - Installed and on PATH
 - [Node.js](https://nodejs.org) - For running the MCP server via npx
 
 ## Installation
@@ -77,35 +79,59 @@ After joining a workflow, use the `hotwired` CLI for agent communication:
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  HOTWIRED DESKTOP APP                                           │
-│  └── Unix Socket: ~/.hotwired/hotwired.sock                     │
-└─────────────────────────────────────────────────────────────────┘
-                              ▲
-                              │ Local IPC (no network)
-                              │
-┌─────────────────────────────┼───────────────────────────────────┐
-│  CLAUDE CODE                │                                   │
-│  ┌──────────────────────────┴────────────────────────────┐      │
-│  │  hotwired-mcp (via npx)                               │      │
-│  │  github.com/hotwired-sh/hotwired-mcp                  │      │
-│  └───────────────────────────────────────────────────────┘      │
-│  ┌───────────────────────────────────────────────────────┐      │
-│  │  This Plugin                                          │      │
-│  │  - SessionStart hook → registers session              │      │
-│  │  - SessionEnd hook → deregisters session              │      │
-│  │  - /hotwired:status command                           │      │
-│  └───────────────────────────────────────────────────────┘      │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│  HOTWIRED DESKTOP APP                                        │
+│  ├── Unix Socket: ~/.hotwired/hotwired.sock                  │
+│  └── WebSocket: ws://127.0.0.1:8765 (UI event bus)          │
+└──────────────────────────────────────────────────────────────┘
+                             ▲
+                             │ Local IPC (no network)
+                             │
+┌────────────────────────────┼─────────────────────────────────┐
+│  CLAUDE CODE               │                                 │
+│  ┌─────────────────────────┴───────────────────────────────┐ │
+│  │  hotwired-mcp (via npx)                                 │ │
+│  │  MCP tools: hotwire, pair, ping, get_protocol           │ │
+│  └─────────────────────────────────────────────────────────┘ │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │  hotwired CLI (native binary)                           │ │
+│  │  Workflow: status, send, impediment, complete, inbox     │ │
+│  │  Internal: session-start, session-end, hook-event        │ │
+│  └─────────────────────────────────────────────────────────┘ │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │  This Plugin (hooks.json)                               │ │
+│  │  Routes lifecycle hooks → hotwired CLI                  │ │
+│  │  /hotwired:status slash command                         │ │
+│  └─────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-**Everything runs locally.** The MCP server communicates with the desktop app via Unix socket. No external network calls.
+**Everything runs locally.** The MCP server and CLI communicate with the desktop app via Unix socket. No external network calls.
+
+### Lifecycle Hooks
+
+The plugin registers handlers for Claude Code lifecycle events via `hooks.json`. All hooks route through the `hotwired` CLI binary for fast, fire-and-forget IPC:
+
+| Hook | Command | Purpose |
+|------|---------|---------|
+| SessionStart | `hotwired internal session-start` | Register session + telemetry |
+| SessionEnd | `hotwired internal session-end` | Deregister session + telemetry |
+| Stop | `hotwired internal hook-event stop` | Agent stopping |
+| PreCompact | `hotwired internal hook-event pre_compact` | Context about to compact |
+| Notification | `hotwired internal hook-event notification` | Agent notification |
+| SubagentStart | `hotwired internal hook-event subagent_start` | Subagent spawned |
+| SubagentStop | `hotwired internal hook-event subagent_stop` | Subagent finished |
+| TaskCompleted | `hotwired internal hook-event task_completed` | Task completed |
 
 ## Troubleshooting
 
 ### "MCP server not found"
 
 The plugin runs `npx @hotwired-sh/hotwired-mcp`. Make sure Node.js is installed.
+
+### "hotwired: command not found"
+
+The `hotwired` CLI must be on your PATH. Install it from [hotwired-cli](https://github.com/hotwired-sh/hotwired-cli).
 
 ### "Not in Zellij session"
 
@@ -122,6 +148,7 @@ Make sure the Hotwired desktop app is running. It creates the socket at `~/.hotw
 
 ## Related
 
+- [hotwired-cli](https://github.com/hotwired-sh/hotwired-cli) - The CLI binary (open source)
 - [hotwired-mcp](https://github.com/hotwired-sh/hotwired-mcp) - The MCP server (open source)
 - [hotwired.sh](https://hotwired.sh) - Desktop app and documentation
 

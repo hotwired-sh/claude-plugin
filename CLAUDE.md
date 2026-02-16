@@ -11,6 +11,16 @@ This plugin connects Claude Code to the Hotwired multi-agent workflow system.
 - `/hotwire [intent]` - Start a new workflow run
 - `/pair` - Join an existing run as a second agent
 
+## Lifecycle Hooks
+
+This plugin routes Claude Code lifecycle events to the Hotwired backend via the `hotwired` CLI:
+
+- **SessionStart/SessionEnd** → `hotwired internal session-start/session-end` (registers/deregisters sessions)
+- **Stop, PreCompact, Notification** → `hotwired internal hook-event <name>` (telemetry)
+- **SubagentStart, SubagentStop, TaskCompleted** → `hotwired internal hook-event <name>` (telemetry)
+
+All hooks are fire-and-forget. They never block Claude Code.
+
 ## Quick Reference
 
 When working in a Hotwired workflow:
