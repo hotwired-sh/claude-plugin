@@ -1,3 +1,15 @@
+# [2.3.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.2.1...v2.3.0) (2026-02-16)
+
+
+### Bug Fixes
+
+* **pair:** correct CLI syntax and simplify flow ([c777293](https://github.com/hotwired-sh/claude-plugin/commit/c77729341041275f0fe2964ee6dd933ef67d4549))
+
+
+### Features
+
+* add `hotwired protocol` to CLI commands, improve compaction recovery ([6d74cbe](https://github.com/hotwired-sh/claude-plugin/commit/6d74cbeb6b80ba810a857ca56f749c76992c20e7))
+
 ## [2.2.1](https://github.com/hotwired-sh/claude-plugin/compare/v2.2.0...v2.2.1) (2026-02-15)
 
 
