@@ -13,7 +13,7 @@ Initiates the Hotwired protocol. You become the PRIMARY AGENT.
 ## Compaction Survival
 
 If context compaction occurs, preserve: `run_id`, `role`, `playbook`.
-Call `get_run_status` to recover state.
+Call `hotwired status` to recover state and `hotwired protocol` to re-fetch your instructions.
 
 ## Check for Active/Resumable Runs First
 
@@ -36,62 +36,78 @@ Before starting a new run, check if you should CONTINUE an existing one:
 
 4. **When in doubt, start fresh.** Users prefer a clean start over being asked about old runs.
 
-This prevents annoying prompts about irrelevant runs from other projects.
-
-## Tools Locked Until Success
-
-No workflow tools until this returns your protocol.
-
 ## Prerequisites
 
-1. `$ZELLIJ_SESSION_NAME` must be set
-2. `hotwired status` must succeed (tests CLI connectivity)
+1. `$ZELLIJ_SESSION_NAME` must be set (you must be in a Zellij terminal)
+2. Hotwired desktop app must be running
 
 If either fails: "Restart Claude in Zellij with desktop app running."
 
 ## Execution
 
 ### 1. Gather Context
-```
-project_path: pwd
-intent: user's description (may be empty)
-zellij_session: $ZELLIJ_SESSION_NAME
+```bash
+echo $ZELLIJ_SESSION_NAME   # Must be set
+pwd                          # Your project directory
 ```
 
 ### 2. Analyze Intent
-- "create/write/draft/PRD" → doc-editor
-- "implement/build/code/fix" → plan-build
-- Scan for docs/, specs/ directories
-- Match keywords to existing files
+- "create/write/draft/PRD" → `--playbook doc-editor`
+- "implement/build/code/fix" → `--playbook plan-build`
+- Scan for docs/, specs/ directories to help decide
 
 ### 3. Call CLI
+
+**IMPORTANT: Use these EXACT flags. Do NOT invent flags like --project-path or --zellij-session.**
+
 ```bash
-hotwired hotwire \
-  --project-path "$PWD" \
-  --zellij-session "$ZELLIJ_SESSION_NAME" \
-  --intent "<intent>" \
-  --playbook "<suggested_playbook>"
+hotwired hotwire --project "$PWD" --intent "<intent>" --playbook "<playbook>"
 ```
+
+The Zellij session is auto-detected from `$ZELLIJ_SESSION_NAME`. Do NOT pass it as a flag.
+
+Full flag reference:
+- `--project <PATH>` - Project directory (defaults to current dir, so often optional)
+- `--intent <TEXT>` - What you want to accomplish
+- `--playbook <NAME>` - Which playbook (doc-editor, plan-build, architect-team)
 
 ### 4. Handle Response
 
 **Started** (immediate):
-```json
-{ "status": "started", "run_id": "xxx", "role": "primary", "playbook": "...", "protocol": "..." }
 ```
-→ You have your protocol. Begin working.
+Run started: <run_id>
+Your role: <role>
+
+<protocol instructions>
+```
+→ You have your protocol. **Immediately run `hotwired status` to verify attachment.**
 
 **NeedsConfirmation** (user must confirm in app):
-```json
-{ "status": "needs_confirmation", "pending_run_id": "xxx", "message": "..." }
+```
+Run pending: <run_id>
 ```
 → Tell user: "Please confirm the workflow in Hotwired app."
 → Wait. When user confirms, you'll receive a trigger message.
-→ Then call `get_protocol(run_id, role)` to get your instructions.
 
 **Error**:
 → Report to user with fix suggestions.
 
-## After Started
+## After Started - CRITICAL STEPS
 
-Follow the protocol. When you need a second agent, raise impediment → user runs `/pair`.
+1. **Verify attachment**: Run `hotwired status` - must show your run and role
+2. **Read your protocol carefully** - the protocol instructions returned above are your workflow guide. If you lose them after compaction, run `hotwired protocol` to re-fetch.
+3. **Follow your protocol instructions** - they tell you exactly what to do for your role
+4. When you need a second agent, raise impediment → user runs `/pair`
+
+## Available CLI Commands (after hotwire)
+
+Once attached to a run, you can use:
+- `hotwired protocol` - Re-fetch your protocol instructions (use after compaction)
+- `hotwired status` - Check run status and connected agents
+- `hotwired artifact sync <file>` - Register/update a document artifact
+- `hotwired artifact ls` - List tracked artifacts
+- `hotwired artifact comment <file> "<text>" "<comment>"` - Add anchored comment
+- `hotwired send <role> "<message>"` - Send message to another agent
+- `hotwired inbox` - Check for messages
+- `hotwired complete` - Mark task as done
+- `hotwired impediment "<description>"` - Report a blocker
