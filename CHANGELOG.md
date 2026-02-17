@@ -1,3 +1,15 @@
+# [2.4.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.3.0...v2.4.0) (2026-02-17)
+
+
+### Bug Fixes
+
+* add git rules to CLAUDE.md to prevent unintended major version bumps ([e09ecae](https://github.com/hotwired-sh/claude-plugin/commit/e09ecae6d5be9d332e645a83cf4d3baec8c1d460))
+
+
+### Features
+
+* route lifecycle hooks through hotwired CLI instead of shell scripts ([1104e20](https://github.com/hotwired-sh/claude-plugin/commit/1104e2094b9adbd9f640043cd20aac3228cb87dd))
+
 # [2.3.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.2.1...v2.3.0) (2026-02-16)
 
 
