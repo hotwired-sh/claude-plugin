@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.4.0...v2.5.0) (2026-02-23)
+
+
+### Features
+
+* add /open command for document editing ([3aa5b94](https://github.com/hotwired-sh/claude-plugin/commit/3aa5b94938d3eff2506767c4f76d75a10501bf86))
+
 # [2.4.0](https://github.com/hotwired-sh/claude-plugin/compare/v2.3.0...v2.4.0) (2026-02-17)
 
 
